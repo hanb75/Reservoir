@@ -1,0 +1,165 @@
+//GUI.java
+//Team Reservoir 
+//Gui class
+
+//imports
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.io.File;
+
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JFileChooser;
+
+public class GUI extends JFrame implements ActionListener {
+	// private JButton reg;
+	// private JButton custom;
+	JMenuItem upload, export, exit,editD,deleteD,hDelete;
+	JFileChooser chooser;
+	JMenuBar menu;
+	JMenu file, edit, help;
+	
+
+	public GUI() {
+		// Set title
+		super("ChequeBox");
+
+		// Set Layout
+		setLayout(new FlowLayout());
+
+		// Initialize Variables
+		menu    = new JMenuBar();
+		file    = new JMenu("File");
+		edit    = new JMenu("Edit");
+		help    = new JMenu("Help");
+		upload  = new JMenuItem("Upload File");
+		export  = new JMenuItem("Export File");
+		exit    = new JMenuItem("Exit");
+                editD   = new JMenuItem("Edit Donation");// create edit donation
+                deleteD = new JMenuItem("Delete donation");// create delete
+                hDelete = new JMenuItem("How To Delete Donation");// create
+
+		// Set Mnemonics
+		file.setMnemonic(KeyEvent.VK_F);
+		edit.setMnemonic(KeyEvent.VK_E);
+		help.setMnemonic(KeyEvent.VK_H);
+		
+                //set menu bar
+                setJMenuBar(menu);
+                
+                //add items to menu bar
+                
+                menu.add(file);// add file to frame
+                menu.add(edit);// add edit to frame
+                menu.add(help);// add help to frame
+                
+		file.add(upload);// add upload item											// item
+		file.add(export);// add export item
+		file.add(exit);// add export item
+		
+                edit.add(editD);// add edit donation item															// donation item
+		edit.add(deleteD);// add delete donation item
+                
+		help.add(hDelete);// add how to delete donation item
+                
+                //create handler objects
+                HandlerExport handler   = new HandlerExport();    
+		HandlerExit exitH       = new HandlerExit();          
+                HandlerEdit editH       = new HandlerEdit();          
+                HandlerDelete deleteH   = new HandlerDelete(); 
+                HandlerHdelete hdeleteH = new HandlerHdelete(); 
+
+                
+                //add action lisetners
+		upload.addActionListener(this);//special case for file browser
+                export.addActionListener(handler);
+                exit.addActionListener(exitH);                  
+		editD.addActionListener(editH);
+                deleteD.addActionListener(deleteH);
+                hDelete.addActionListener(hdeleteH);
+                
+		
+		
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) 
+        {
+
+		chooser = new JFileChooser();
+		chooser.setCurrentDirectory(new java.io.File("."));
+		chooser.setDialogTitle("Title");
+		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		//
+		// disable the "All files" option.
+		//
+		chooser.setAcceptAllFileFilterUsed(false);
+		//
+		if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+			System.out.println("getCurrentDirectory(): "
+					+ chooser.getCurrentDirectory());
+			System.out.println("getSelectedFile() : "
+					+ chooser.getSelectedFile());
+		} else {
+			System.out.println("No Selection ");
+		}
+
+	}
+	
+        // file menu export handler
+	 private class HandlerExport implements ActionListener {
+	 public void actionPerformed(ActionEvent event) {
+	 JOptionPane.showMessageDialog(null, "test");
+	
+	 }
+	 }
+	
+	 // file menu exit handler
+	 private class HandlerExit implements ActionListener {
+	 public void actionPerformed(ActionEvent event) {
+	 int x = JOptionPane.showConfirmDialog(null,
+	 "Would you like to exit?", "Exit Confirmation",
+	 JOptionPane.YES_NO_OPTION);
+	 if (x == JOptionPane.YES_OPTION) {
+	 System.exit(0);
+	 }
+	 }
+	 }
+	
+	 // edit menu edit donation handler
+	 private class HandlerEdit implements ActionListener {
+	 public void actionPerformed(ActionEvent event) {
+	 JOptionPane.showMessageDialog(null, "test");
+	 }
+	 }
+	
+	 // edit menu delete handler
+	 private class HandlerDelete implements ActionListener {
+	 public void actionPerformed(ActionEvent event) {
+	 JOptionPane.showMessageDialog(null, "test");
+	 }
+	 }
+	
+	 // help menu delete handler
+	 private class HandlerHdelete implements ActionListener {
+	 public void actionPerformed(ActionEvent event) {
+	 JOptionPane
+	 .showMessageDialog(
+	 null,
+	 "To delete a donation, select the desired donation "
+	 + "\n to be removed and go to Edit>Delete Donation. "
+	 + "\n A dialog box will appear asking if you are sure you "
+	 + "\n want to delete the donation. Click \"Yes\".",
+	 "How to delete a donation",
+	 JOptionPane.PLAIN_MESSAGE);
+	 }
+	 }
+}
