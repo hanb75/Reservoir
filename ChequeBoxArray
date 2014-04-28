@@ -1,4 +1,3 @@
-
 package chequeboxdata;
 
 
@@ -37,18 +36,6 @@ public class ChequeBoxData {
             Sheet sheet = workbook.getSheet(0);
             //data = new String[sheet.getRows()][sheet.getColumn()];
             
-            //[row][column]
-//            Cell a1 = sheet.getCell(0,0); 
-//            Cell b2 = sheet.getCell(1,1); 
-//            Cell c2 = sheet.getCell(2,1); 
-//
-//            String stringa1 = a1.getContents(); 
-//            String stringb2 = b2.getContents(); 
-//            String stringc2 = c2.getContents();
-//
-//            System.out.println(stringa1);
-//            System.out.println(stringb2);
-//            System.out.println(stringc2);
             for (int i = 0; i <sheet.getColumns(); i++) 
             {   for (int j = 0; j < sheet.getRows(); j++) 
                 {
