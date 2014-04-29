@@ -226,19 +226,40 @@ public class GUI extends JFrame implements ActionListener {
 	}
        
         // file menu export handler
-        // TEST STRING USED AS FILE INPUT RIGHT NOW
-	 private class HandlerExport implements ActionListener {
+	private class HandlerExport implements ActionListener {
             public void actionPerformed(ActionEvent event) {
                 
-                String sb = "TEST CONTENT";
+                // String sb = "TEST CONTENT";
+                
                 JFileChooser chooser = new JFileChooser();
-                chooser.setCurrentDirectory(new File("/home/me/Documents"));
+                chooser.setCurrentDirectory(new File("/Desktop"));
                 int retrival = chooser.showSaveDialog(null);
                 if (retrival == JFileChooser.APPROVE_OPTION) {
                     try {
-                        FileWriter fw = new FileWriter(chooser.getSelectedFile()+".txt");
-                        fw.write(sb.toString());
-                    } catch (Exception ex) {
+                        FileWriter filewriter = new FileWriter(chooser.getSelectedFile()+".txt");
+                        
+                        // filewriter.write(sb.toString());
+                       
+                        // convert table back to String
+                        int numRows = 2;
+                        int numCols = 16;
+                        
+                        String s = "";
+                        for (int row = 0; row < numRows; row++) {
+                            for(int col = 0; col < (numCols - 1); col++)
+                            {
+                                s = s + table.getValueAt(row, col) + "\t";
+                            }
+                            s = s + table.getValueAt(row, (numCols - 1));
+                            s = s + "\r\n";
+                        }
+                        
+                        //filewriter.write(s.toString());
+                        filewriter.write(s);
+                        
+                        filewriter.close();
+                    } 
+                    catch (Exception ex) {
                         ex.printStackTrace();
                     }
                 }   
