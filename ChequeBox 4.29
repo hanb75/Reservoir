@@ -62,12 +62,12 @@ import java.util.List;
 public class GUI extends JFrame implements ActionListener {
 	// private JButton reg;
 	// private JButton custom;
-	JMenuItem upload, export, exit,editD,deleteD,hDelete;
+	JMenuItem upload, export, exit,editD,deleteD,hDelete,hExport;
 	JFileChooser chooser;
 	JMenuBar menu;
 	JMenu file, edit, help;
         
-        
+        JFrame frame;
         DefaultTableModel model;
         JTable table;
 
@@ -86,9 +86,11 @@ public class GUI extends JFrame implements ActionListener {
 		upload  = new JMenuItem("Upload File");
 		export  = new JMenuItem("Export File");
 		exit    = new JMenuItem("Exit");
-                editD   = new JMenuItem("Edit Donation");// create edit donation
-                deleteD = new JMenuItem("Delete donation");// create delete
-                hDelete = new JMenuItem("How To Delete Donation");// create
+                editD   = new JMenuItem("Edit Donation");
+                deleteD = new JMenuItem("Delete donation");
+                hDelete = new JMenuItem("How To Delete Donation");
+                hExport = new JMenuItem("How to Export a File");
+                
                 
                 
 
@@ -114,13 +116,15 @@ public class GUI extends JFrame implements ActionListener {
 		edit.add(deleteD);// add delete donation item
                 
 		help.add(hDelete);// add how to delete donation item
+                help.add(hExport);// add how to export file
                 
                 //create handler objects
                 HandlerExport handler   = new HandlerExport();    
 		HandlerExit exitH       = new HandlerExit();          
                 HandlerEdit editH       = new HandlerEdit();          
                 HandlerDelete deleteH   = new HandlerDelete(); 
-                HandlerHdelete hdeleteH = new HandlerHdelete(); 
+                HandlerHdelete hdeleteH = new HandlerHdelete();
+                HandlerHexport hexportH = new HandlerHexport();
 
                 //add action lisetners
 		upload.addActionListener(this);//special case for file browser
@@ -129,17 +133,19 @@ public class GUI extends JFrame implements ActionListener {
 		editD.addActionListener(editH);
                 deleteD.addActionListener(deleteH);
                 hDelete.addActionListener(hdeleteH);
+                hExport.addActionListener(hexportH);
 	}        
          
         public void tableModel() {
             
-            JFrame frame = new JFrame("Budget Table");
+            frame = new JFrame("Budget Table");
             String[] columnNames = { "Account ID", "Account Description", "Account Type",
                                       "4/30", "5/31", "6/30", "7/31", "8/31", "9/30", "10/31",
                                       "11/30", "12/31", "1/31", "2/29", "3/31", "YTD Total"};             
             
             model = new DefaultTableModel(columnNames, 5);
             table = new JTable( model );
+            
             
             frame.setVisible(true);
             frame.pack();
@@ -273,7 +279,7 @@ public class GUI extends JFrame implements ActionListener {
 	 "Would you like to exit?", "Exit Confirmation",
 	 JOptionPane.YES_NO_OPTION);
 	 if (x == JOptionPane.YES_OPTION) {
-	 System.exit(0);
+             System.exit(0);
 	 }
 	 }
 	 }
@@ -305,10 +311,25 @@ public class GUI extends JFrame implements ActionListener {
 	 .showMessageDialog(
 	 null,
 	 "To delete a donation, select the desired donation "
-	 + "\n to be removed and go to Edit>Delete Donation. "
+	 + "\n to be removed and go to Edit, Delete Donation. "
 	 + "\n A dialog box will appear asking if you are sure you "
 	 + "\n want to delete the donation. Click \"Yes\".",
 	 "How to delete a donation",
+	 JOptionPane.PLAIN_MESSAGE);
+	 }
+	 }
+         
+        // help menu export a file
+	 private class HandlerHexport implements ActionListener {
+	 public void actionPerformed(ActionEvent event) {
+	 JOptionPane
+	 .showMessageDialog(
+	 null,
+	 "To export a file, go to File, Export File. A window  "
+	 + "\n will pop up asking you to select a location to "
+	 + "\n save the file and to name the file. Then, click"
+	 + "\n \"Save\".",
+	 "How to export a file",
 	 JOptionPane.PLAIN_MESSAGE);
 	 }
 	 }
