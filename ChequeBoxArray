@@ -1,4 +1,3 @@
-//main
 package chequeBox;
 //Team Reservoir
 //Main Class
@@ -15,14 +14,8 @@ public class main {
 		go.setSize(900, 700);
 		go.setVisible(true);
 		go.setLocationRelativeTo(null);
-                
-                //go.tableModel();
-                
         }
-
 }
-
-
 
 package chequeBox;
 //GUI.java
@@ -40,6 +33,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -56,6 +51,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JFileChooser;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
+
+import java.nio.charset.Charset;
+import java.util.List;
 
 public class GUI extends JFrame implements ActionListener {
 	// private JButton reg;
@@ -127,9 +126,6 @@ public class GUI extends JFrame implements ActionListener {
 		editD.addActionListener(editH);
                 deleteD.addActionListener(deleteH);
                 hDelete.addActionListener(hdeleteH);
-                
-                
-                
 	}        
          
         public void tableModel() {
@@ -143,7 +139,9 @@ public class GUI extends JFrame implements ActionListener {
             table = new JTable( model );
             
             frame.setVisible(true);
+            frame.pack();
             frame.setBounds(0,0,500,500);
+            frame.setLocationRelativeTo(null);
             frame.add(table.getTableHeader(), BorderLayout.PAGE_START);
             frame.add(table);
         }        
@@ -169,10 +167,9 @@ public class GUI extends JFrame implements ActionListener {
 //                        System.out.println("getSelectedFile() : "
 //					+ chooser.getSelectedFile());
                     
+                    tableModel();
+                    
                     final String FILE_NAME = chooser.getSelectedFile().getName();
-                    //final String FILE_NAME = "src/test/blah.txt";
-                    //String[] data = new String[5];
-                    //System.out.println(FILE_NAME);
 
                     FileReader fileReader = null;
                     try {
@@ -181,30 +178,42 @@ public class GUI extends JFrame implements ActionListener {
                         
                     }
                     BufferedReader bufferedReader = new BufferedReader(fileReader);
+                                        
+                    List<String> data = new ArrayList<String>();
                     
-                    ArrayList<String> data = new ArrayList<String>();
-
-                    String temp = "";
+                    String temp = " ";
                     
+                    //read file into list
                     try {
+                        int row = 0;
                         while( (temp = bufferedReader.readLine()) != null)
                         {
-                            data.add(temp);
+                            String dataValue[] = temp.split("\t");
+                            String value = "";
+                            
+                            //output data to table
+                            int numCols = value.length();
+                                for(int col = 0; col < numCols; col++)
+                                {
+                                    value = dataValue[col];
+                                    table.setValueAt(value, row, col);
+                                }
+                            row++;
                         }
                         bufferedReader.close();
                         
                     } catch (IOException ex) {
-                        Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+                        
                     }
                     
-                   for (int i=0; i<data.size(); i++)
-                   {
-                       System.out.println(data.get(i));
-                       
-                       
-                   }
-                    
-                
+//                    String[] sArray = data.toArray(new String[data.size()]); 
+//                    System.out.println(sArray[0]);
+
+//                    //print to console
+//                    for (int i=0; i<data.size(); i++)
+//                    {
+//                        System.out.println(data.get(i));                       
+//                    } 
                 } 
                 else {
 			System.out.println("No Selection ");
