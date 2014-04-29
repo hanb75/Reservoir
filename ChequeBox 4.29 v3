@@ -288,7 +288,13 @@ public class GUI extends JFrame implements ActionListener {
 	 // edit menu delete handler
 	 private class HandlerDelete implements ActionListener {
 	 public void actionPerformed(ActionEvent event) {
-	 JOptionPane.showMessageDialog(null, "test");
+	 int x = JOptionPane.showConfirmDialog(null,
+	 "Would you like to delete this donation?", "Delete Donation Confirmation",
+	 JOptionPane.YES_NO_OPTION);
+         if (x == JOptionPane.YES_OPTION) {
+            int row = table.getSelectedRow();
+            model.removeRow(row);
+         }
 	 }
 	 }
 
