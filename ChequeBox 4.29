@@ -180,7 +180,7 @@ public class GUI extends JFrame implements ActionListener {
                     }
                     BufferedReader bufferedReader = new BufferedReader(fileReader);
                                         
-                    List<String> data = new ArrayList<String>();
+                    // List<String> data = new ArrayList<String>();
                     
                     String temp = " ";
                     
@@ -193,7 +193,8 @@ public class GUI extends JFrame implements ActionListener {
                             String value = "";
                             
                             //output data to table
-                            int numCols = value.length();
+                            //int numCols = value.length();
+                            int numCols = 16;
                                 for(int col = 0; col < numCols; col++)
                                 {
                                     value = dataValue[col];
