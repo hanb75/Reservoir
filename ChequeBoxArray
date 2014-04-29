@@ -1,3 +1,29 @@
+//main
+package chequeBox;
+//Team Reservoir
+//Main Class
+
+//imports 
+import javax.swing.JFrame;
+
+public class main {
+
+	public static void main(String[] args)
+	{
+		GUI go = new GUI();
+		go.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		go.setSize(900, 700);
+		go.setVisible(true);
+		go.setLocationRelativeTo(null);
+                
+                //go.tableModel();
+                
+        }
+
+}
+
+
+
 package chequeBox;
 //GUI.java
 //Team Reservoir 
