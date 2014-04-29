@@ -143,7 +143,12 @@ public class GUI extends JFrame implements ActionListener {
                                       "4/30", "5/31", "6/30", "7/31", "8/31", "9/30", "10/31",
                                       "11/30", "12/31", "1/31", "2/29", "3/31", "YTD Total"};             
             
-            model = new DefaultTableModel(columnNames, 5);
+            model = new DefaultTableModel(columnNames, 5){
+                    @Override
+                    public boolean isCellEditable(int row, int column) {
+                    return false;
+                    }};
+            
             table = new JTable( model );
             
             
@@ -287,7 +292,12 @@ public class GUI extends JFrame implements ActionListener {
 	 // edit menu edit donation handler
 	 private class HandlerEdit implements ActionListener {
 	 public void actionPerformed(ActionEvent event) {
-	 JOptionPane.showMessageDialog(null, "test");
+         int x == JOptionPane.showConfirmDialog(null,
+         "Would you like to edit the selected donation?", "Edit Donation Confirmation",
+         JOptionPane.YES_NO_OPTION);
+         if (x == JOptionPane.YES_OPTION) {
+             // http://www.coderanch.com/t/343963/GUI/java/JTable-column-editable-editable
+         }      
 	 }
 	 }
 
@@ -295,7 +305,7 @@ public class GUI extends JFrame implements ActionListener {
 	 private class HandlerDelete implements ActionListener {
 	 public void actionPerformed(ActionEvent event) {
 	 int x = JOptionPane.showConfirmDialog(null,
-	 "Would you like to delete this donation?", "Delete Donation Confirmation",
+	 "Would you like to delete the selected donation?", "Delete Donation Confirmation",
 	 JOptionPane.YES_NO_OPTION);
          if (x == JOptionPane.YES_OPTION) {
             int row = table.getSelectedRow();
