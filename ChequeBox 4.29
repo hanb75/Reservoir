@@ -292,10 +292,10 @@ public class GUI extends JFrame implements ActionListener {
 	 // edit menu edit donation handler
 	 private class HandlerEdit implements ActionListener {
 	 public void actionPerformed(ActionEvent event) {
-         int x == JOptionPane.showConfirmDialog(null,
-         "Would you like to edit the selected donation?", "Edit Donation Confirmation",
+	 int y = JOptionPane.showConfirmDialog(null,
+	 "Would you like to edit the selected donation?", "Edit Donation Confirmation",
          JOptionPane.YES_NO_OPTION);
-         if (x == JOptionPane.YES_OPTION) {
+         if (y == JOptionPane.YES_OPTION) {
              // http://www.coderanch.com/t/343963/GUI/java/JTable-column-editable-editable
          }      
 	 }
@@ -304,10 +304,10 @@ public class GUI extends JFrame implements ActionListener {
 	 // edit menu delete handler
 	 private class HandlerDelete implements ActionListener {
 	 public void actionPerformed(ActionEvent event) {
-	 int x = JOptionPane.showConfirmDialog(null,
+	 int z = JOptionPane.showConfirmDialog(null,
 	 "Would you like to delete the selected donation?", "Delete Donation Confirmation",
 	 JOptionPane.YES_NO_OPTION);
-         if (x == JOptionPane.YES_OPTION) {
+         if (z == JOptionPane.YES_OPTION) {
             int row = table.getSelectedRow();
             model.removeRow(row);
          }
