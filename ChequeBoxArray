@@ -1,8 +1,10 @@
+package chequeBox;
 //GUI.java
 //Team Reservoir 
 //Gui class
 
 //imports
+import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,6 +15,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -34,9 +39,10 @@ public class GUI extends JFrame implements ActionListener {
 	JMenuBar menu;
 	JMenu file, edit, help;
         
+        
         DefaultTableModel model;
         JTable table;
-        
+
 	public GUI() {
 		// Set title
 		super("ChequeBox");
@@ -55,6 +61,8 @@ public class GUI extends JFrame implements ActionListener {
                 editD   = new JMenuItem("Edit Donation");// create edit donation
                 deleteD = new JMenuItem("Delete donation");// create delete
                 hDelete = new JMenuItem("How To Delete Donation");// create
+                
+                
 
 		// Set Mnemonics
 		file.setMnemonic(KeyEvent.VK_F);
@@ -86,7 +94,6 @@ public class GUI extends JFrame implements ActionListener {
                 HandlerDelete deleteH   = new HandlerDelete(); 
                 HandlerHdelete hdeleteH = new HandlerHdelete(); 
 
-                
                 //add action lisetners
 		upload.addActionListener(this);//special case for file browser
                 export.addActionListener(handler);
@@ -95,19 +102,25 @@ public class GUI extends JFrame implements ActionListener {
                 deleteD.addActionListener(deleteH);
                 hDelete.addActionListener(hdeleteH);
                 
-
-
-	}
-        
+                
+                
+	}        
+         
         public void tableModel() {
+            
+            JFrame frame = new JFrame("Budget Table");
             String[] columnNames = { "Account ID", "Account Description", "Account Type",
                                       "4/30", "5/31", "6/30", "7/31", "8/31", "9/30", "10/31",
                                       "11/30", "12/31", "1/31", "2/29", "3/31", "YTD Total"};             
             
-            model = new DefaultTableModel(columnNames, 0);
+            model = new DefaultTableModel(columnNames, 5);
             table = new JTable( model );
-        }
-        
+            
+            frame.setVisible(true);
+            frame.setBounds(0,0,500,500);
+            frame.add(table.getTableHeader(), BorderLayout.PAGE_START);
+            frame.add(table);
+        }        
 
 	@Override
 	public void actionPerformed(ActionEvent e) 
@@ -116,64 +129,62 @@ public class GUI extends JFrame implements ActionListener {
 		chooser = new JFileChooser();
 		chooser.setCurrentDirectory(new java.io.File("."));
 		chooser.setDialogTitle("Title");
-		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		//
-		// disable the "All files" option.
-		//
+		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+                
 		chooser.setAcceptAllFileFilterUsed(false);
-		//
+                
 		if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-                    System.out.println("getCurrentDirectory(): "
-                                        + chooser.getCurrentDirectory());
-                    System.out.println("getSelectedFile() : "
-					+ chooser.getSelectedFile());
+//			System.out.println("getCurrentDirectory(): "
+//					+ chooser.getCurrentDirectory());
+//			System.out.println("getSelectedFile() : "
+//					+ chooser.getSelectedFile());
+//                        System.out.println("getCurrentDirectory(): "
+//                                        + chooser.getCurrentDirectory());
+//                        System.out.println("getSelectedFile() : "
+//					+ chooser.getSelectedFile());
                     
                     final String FILE_NAME = chooser.getSelectedFile().getName();
                     //final String FILE_NAME = "src/test/blah.txt";
                     //String[] data = new String[5];
+                    //System.out.println(FILE_NAME);
 
                     FileReader fileReader = null;
-
-                    try{
+                    try {
                         fileReader = new FileReader(FILE_NAME);
-                    } catch (FileNotFoundException ex){
+                    } catch (FileNotFoundException ex) {
+                        
                     }
-                    
                     BufferedReader bufferedReader = new BufferedReader(fileReader);
-                    ArrayList<String> data = new ArrayList<>();
+                    
+                    ArrayList<String> data = new ArrayList<String>();
 
-                    String line = null;
+                    String temp = "";
+                    
                     try {
-                        while ((line = bufferedReader.readLine()) != null) {
-                            data.add(line);
-                            data.add("\n");
+                        while( (temp = bufferedReader.readLine()) != null)
+                        {
+                            data.add(temp);
                         }
-                    } catch (IOException ex) {
-                    }
-                    try {
                         bufferedReader.close();
+                        
                     } catch (IOException ex) {
+                        Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
                     }
-
-//                    for (String lines : data) {
-//                        //System.out.println(linep);    
-//                    }
                     
-                    Object[] object = data.toArray();
+                   for (int i=0; i<data.size(); i++)
+                   {
+                       System.out.println(data.get(i));
+                       
+                       
+                   }
                     
-                    model.addRow(object);
-        
-                }//if
+                
+                } 
                 else {
-                    System.out.println("No Selection ");
+			System.out.println("No Selection ");
 		}
 
-        }
-//
-//    private void initComponents() {
-//        DataTable();
-//    }
-
+	}
         // file menu export handler
 	 private class HandlerExport implements ActionListener {
 	 public void actionPerformed(ActionEvent event) {
@@ -222,16 +233,4 @@ public class GUI extends JFrame implements ActionListener {
 	 JOptionPane.PLAIN_MESSAGE);
 	 }
 	 }
-         
-         // table for data
-//         public void DataTable () {
-//             initComponents();
-//             String[] columnNames = { "Account ID", "Account Description", "Account Type",
-//                                      "4/30", "5/31", "6/30", "7/31", "8/31", "9/30", "10/31",
-//                                      "11/30", "12/31", "1/31", "2/29", "3/31", "YTD Total"};
-//             
-//             Object[][] data = {};
-//             
-//             table = new JTable(data, columnNames);
-//         }
 }
