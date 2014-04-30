@@ -62,7 +62,7 @@ import java.util.List;
 public class GUI extends JFrame implements ActionListener {
 	// private JButton reg;
 	// private JButton custom;
-	JMenuItem upload, export, exit,editD,deleteD,hDelete,hExport;
+	JMenuItem upload, export, exit,addD,deleteD,hDelete,hExport;
 	JFileChooser chooser;
 	JMenuBar menu;
 	JMenu file, edit, help;
@@ -86,7 +86,7 @@ public class GUI extends JFrame implements ActionListener {
 		upload  = new JMenuItem("Upload File");
 		export  = new JMenuItem("Export File");
 		exit    = new JMenuItem("Exit");
-                editD   = new JMenuItem("Edit Donation");
+                addD   = new JMenuItem("Add Donation");
                 deleteD = new JMenuItem("Delete donation");
                 hDelete = new JMenuItem("How To Delete Donation");
                 hExport = new JMenuItem("How to Export a File");
@@ -112,7 +112,7 @@ public class GUI extends JFrame implements ActionListener {
 		file.add(export);// add export item
 		file.add(exit);// add export item
 
-                edit.add(editD);// add edit donation item															// donation item
+                edit.add(addD);// add add donation item															// donation item
 		edit.add(deleteD);// add delete donation item
                 
 		help.add(hDelete);// add how to delete donation item
@@ -121,7 +121,7 @@ public class GUI extends JFrame implements ActionListener {
                 //create handler objects
                 HandlerExport handler   = new HandlerExport();    
 		HandlerExit exitH       = new HandlerExit();          
-                HandlerEdit editH       = new HandlerEdit();          
+                HandlerAdd addH       = new HandlerAdd();          
                 HandlerDelete deleteH   = new HandlerDelete(); 
                 HandlerHdelete hdeleteH = new HandlerHdelete();
                 HandlerHexport hexportH = new HandlerHexport();
@@ -130,7 +130,7 @@ public class GUI extends JFrame implements ActionListener {
 		upload.addActionListener(this);//special case for file browser
                 export.addActionListener(handler);
                 exit.addActionListener(exitH);                  
-		editD.addActionListener(editH);
+		addD.addActionListener(addH);
                 deleteD.addActionListener(deleteH);
                 hDelete.addActionListener(hdeleteH);
                 hExport.addActionListener(hexportH);
@@ -143,18 +143,14 @@ public class GUI extends JFrame implements ActionListener {
                                       "4/30", "5/31", "6/30", "7/31", "8/31", "9/30", "10/31",
                                       "11/30", "12/31", "1/31", "2/29", "3/31", "YTD Total"};             
             
-            model = new DefaultTableModel(columnNames, 5){
-                    @Override
-                    public boolean isCellEditable(int row, int column) {
-                    return false;
-                    }};
+            model = new DefaultTableModel(columnNames, 5);
             
             table = new JTable( model );
             
             
             frame.setVisible(true);
             frame.pack();
-            frame.setBounds(0,0,1500,500);
+            frame.setBounds(0,0,500,500);
             frame.setLocationRelativeTo(null);
             frame.add(table.getTableHeader(), BorderLayout.PAGE_START);
             frame.add(table);
@@ -252,7 +248,7 @@ public class GUI extends JFrame implements ActionListener {
                         // filewriter.write(sb.toString());
                        
                         // convert table back to String
-                        int numRows = 2;
+                        int numRows = 5;
                         int numCols = 16;
                         
                         String s = "";
@@ -290,14 +286,14 @@ public class GUI extends JFrame implements ActionListener {
 	 }
 
 	 // edit menu edit donation handler
-	 private class HandlerEdit implements ActionListener {
+	 private class HandlerAdd implements ActionListener {
 	 public void actionPerformed(ActionEvent event) {
 	 int y = JOptionPane.showConfirmDialog(null,
-	 "Would you like to edit the selected donation?", "Edit Donation Confirmation",
+	 "Would you like to add a donation?", "Add Donation Confirmation",
          JOptionPane.YES_NO_OPTION);
          if (y == JOptionPane.YES_OPTION) {
-             // http://www.coderanch.com/t/343963/GUI/java/JTable-column-editable-editable
-         }      
+             model.addRow(new Object[]{""});
+         }
 	 }
 	 }
 
