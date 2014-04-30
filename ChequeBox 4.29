@@ -181,7 +181,7 @@ public class GUI extends JFrame implements ActionListener {
 
 		chooser = new JFileChooser();
 		chooser.setCurrentDirectory(new java.io.File("."));
-		chooser.setDialogTitle("Title");
+		chooser.setDialogTitle("Open");
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
                 
 		chooser.setAcceptAllFileFilterUsed(false);
