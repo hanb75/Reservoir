@@ -134,25 +134,46 @@ public class GUI extends JFrame implements ActionListener {
                 deleteD.addActionListener(deleteH);
                 hDelete.addActionListener(hdeleteH);
                 hExport.addActionListener(hexportH);
+                
+                
+           String[] columnNames = { "Account ID", "Account Description", "Account Type",
+                                      "4/30", "5/31", "6/30", "7/31", "8/31", "9/30", "10/31",
+                                      "11/30", "12/31", "1/31", "2/29", "3/31", "YTD Total"};             
+            
+            model = new DefaultTableModel(columnNames, 5);
+            
+            JTable table = new JTable( model );
+            JScrollPane tableSP = new JScrollPane(table);
+            
+            add(tableSP);
+            
+            
+            int a = this.getWidth();
+            int b = this.getHeight();
+            
+            tableSP.setSize(400,700);
+            System.out.println(a);
+            System.out.println(b);
+                
 	}        
          
-        public void tableModel() {
+       // public void tableModel() {
             
-            frame = new JFrame("Budget Table");
-            String[] columnNames = { "First Name", "Last Name", "Department", "Position", "Gender"};             
+            //frame = new JFrame("Budget Table");
+            //String[] columnNames = { "First Name", "Last Name", "Department", "Position", "Gender"};             
             
-            model = new DefaultTableModel(columnNames, 7);
+           // model = new DefaultTableModel(columnNames, 7);
             
-            table = new JTable( model );
+           // table = new JTable( model );
             
             
-            frame.setVisible(true);
-            frame.pack();
-            frame.setBounds(0,0,500,500);
-            frame.setLocationRelativeTo(null);
-            frame.add(table.getTableHeader(), BorderLayout.PAGE_START);
-            frame.add(table);
-        }        
+            //frame.setVisible(true);
+            //frame.pack();
+            //frame.setBounds(0,0,500,500);
+            //frame.setLocationRelativeTo(null);
+            //frame.add(table.getTableHeader(), BorderLayout.PAGE_START);
+            //frame.add(table);
+      //  }        
 
 	@Override
 	public void actionPerformed(ActionEvent e) 
