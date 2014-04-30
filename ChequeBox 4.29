@@ -137,11 +137,10 @@ public class GUI extends JFrame implements ActionListener {
                 hExport.addActionListener(hexportH);
                 
                 
-           String[] columnNames = { "Account ID", "Account Description", "Account Type",
-                                      "4/30", "5/31", "6/30", "7/31", "8/31", "9/30", "10/31",
-                                      "11/30", "12/31", "1/31", "2/29", "3/31", "YTD Total"};             
+           String[] columnNames = { "First Name", "Last Name", "Department",
+                                      "Position", "Gender"};             
             
-            model = new DefaultTableModel(columnNames, 5);
+            model = new DefaultTableModel(columnNames, 7);
             
             JTable table = new JTable( model );
             JScrollPane tableSP = new JScrollPane(table);
