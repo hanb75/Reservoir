@@ -139,18 +139,16 @@ public class GUI extends JFrame implements ActionListener {
         public void tableModel() {
             
             frame = new JFrame("Budget Table");
-            String[] columnNames = { "Account ID", "Account Description", "Account Type",
-                                      "4/30", "5/31", "6/30", "7/31", "8/31", "9/30", "10/31",
-                                      "11/30", "12/31", "1/31", "2/29", "3/31", "YTD Total"};             
+            String[] columnNames = { "First Name", "Last Name", "Department", "Position", "Gender"};             
             
-            model = new DefaultTableModel(columnNames, 5);
+            model = new DefaultTableModel(columnNames, 7);
             
             table = new JTable( model );
             
             
             frame.setVisible(true);
             frame.pack();
-            frame.setBounds(0,0,1500,500);
+            frame.setBounds(0,0,500,500);
             frame.setLocationRelativeTo(null);
             frame.add(table.getTableHeader(), BorderLayout.PAGE_START);
             frame.add(table);
@@ -203,7 +201,7 @@ public class GUI extends JFrame implements ActionListener {
                             
                             //output data to table
                             //int numCols = dataValue.length; //universal
-                            int numCols = 16;
+                            int numCols = 5;
                                 for(int col = 0; col < numCols; col++)
                                 {
                                     value = dataValue[col];
@@ -248,8 +246,8 @@ public class GUI extends JFrame implements ActionListener {
                         // filewriter.write(sb.toString());
                        
                         // convert table back to String
-                        int numRows = 5;
-                        int numCols = 16;
+                        int numRows = 7;
+                        int numCols = 5;
                         
                         String s = "";
                         for (int row = 0; row < numRows; row++) {
