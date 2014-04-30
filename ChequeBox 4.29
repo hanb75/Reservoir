@@ -142,7 +142,7 @@ public class GUI extends JFrame implements ActionListener {
             
             model = new DefaultTableModel(columnNames, 7);
             
-            JTable table = new JTable( model );
+            table = new JTable( model );
             JScrollPane tableSP = new JScrollPane(table);
             
             add(tableSP);
