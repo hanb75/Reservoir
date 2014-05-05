@@ -196,7 +196,6 @@ public class GUI extends JFrame implements ActionListener {
 //                        System.out.println("getSelectedFile() : "
 //					+ chooser.getSelectedFile());
                     
-                    tableModel();
                     
                     final String FILE_NAME = chooser.getSelectedFile().getName();
 
