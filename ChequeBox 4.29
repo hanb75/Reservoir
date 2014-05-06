@@ -110,12 +110,12 @@ public class GUI extends JFrame implements ActionListener {
         menu.add(help);
                
         // Add items to file menu
-	file.add(upload);											// item
+	file.add(upload);							
 	file.add(export);
 	file.add(exit);
 
         // Add items to edit menu
-        edit.add(addD);														// donation item
+        edit.add(addD);								
 	edit.add(deleteD);
                 
         // Add items to help menu
