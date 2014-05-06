@@ -11,7 +11,7 @@ public class main {
 	{
 		GUI go = new GUI();
 		go.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		go.setSize(900, 700);
+		go.setSize(500, 500);
 		go.setVisible(true);
 		go.setLocationRelativeTo(null);
         }
@@ -147,14 +147,6 @@ public class GUI extends JFrame implements ActionListener {
             
             add(tableSP);
             
-            
-            int a = this.getWidth();
-            int b = this.getHeight();
-            
-            tableSP.setSize(400,700);
-            System.out.println(a);
-            System.out.println(b);
-                
 	}        
          
        // public void tableModel() {
