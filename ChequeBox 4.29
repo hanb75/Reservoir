@@ -1,31 +1,38 @@
-package chequeBox;
-//Team Reservoir
-//Main Class
+// Main.java
+// Author: Burnett Han, Laurel Hager, and Pat DaCosta
+// Date: 5/5/2014
+// Course: CSC4910
+// Description: Runs the ChequeBox program
 
-//imports 
+package chequeBox;
+
+// Imports 
 import javax.swing.JFrame;
 
 public class main {
-
 	public static void main(String[] args)
-	{
-		GUI go = new GUI();
-		go.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		go.setSize(500, 500);
-		go.setVisible(true);
-		go.setLocationRelativeTo(null);
-        }
-}
+	{		
+                GUI chequeBox = new GUI();                                 // Create a new GUI
+		chequeBox.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		chequeBox.setSize(500, 500);                               // Set size
+		chequeBox.setVisible(true);                                // Make it appear when program is run
+		chequeBox.setLocationRelativeTo(null);
+        } // End of main
+} // End of main class
 
 // ================================================================================================
 
-package chequeBox;
-//GUI.java
-//Team Reservoir 
-//Gui class
+// GUI.java
+// Author: Burnett Han, Laurel Hager, and Pat DaCosta
+// Date: 5/5/2014
+// Course: CSC4910
+// Description: Iplements the ChequeBox program
 
-//imports
+package chequeBox;
+
+// Imports
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -36,9 +43,12 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.math.BigInteger;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -46,307 +56,251 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JFileChooser;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.JScrollPane;
 
+public class GUI extends JFrame implements ActionListener {	
+    // Variable declerations
+    JMenuItem upload, export, exit, addD, deleteD, hDelete, hExport;
+    JFileChooser chooser;
+    JMenuBar menu;
+    JMenu file, edit, help;        
+    JFrame frame;
+    JTable table;
+    DefaultTableModel model;
 
-import java.nio.charset.Charset;
-import java.util.List;
+    public GUI() {	
+        // Set title of GUI
+        super("ChequeBox");
 
-public class GUI extends JFrame implements ActionListener {
-	// private JButton reg;
-	// private JButton custom;
-	JMenuItem upload, export, exit,addD,deleteD,hDelete,hExport;
-	JFileChooser chooser;
-	JMenuBar menu;
-	JMenu file, edit, help;
+        // Set Layout of GUI
+        setLayout(new FlowLayout());
+
+        // Initialize Variables
+        menu    = new JMenuBar();
+        file    = new JMenu("File");
+        edit    = new JMenu("Edit");
+        help    = new JMenu("Help");
+        upload  = new JMenuItem("Upload File");
+        export  = new JMenuItem("Export File");
+        exit    = new JMenuItem("Exit");
+        addD    = new JMenuItem("Add Donation");
+        deleteD = new JMenuItem("Delete donation");
+        hDelete = new JMenuItem("How To Delete Donation");
+        hExport = new JMenuItem("How to Export a File");
+                                                
+        // Set Mnemonics
+        file.setMnemonic(KeyEvent.VK_F);
+        edit.setMnemonic(KeyEvent.VK_E);
+        help.setMnemonic(KeyEvent.VK_H);
+
+        // Set menu bar
+        setJMenuBar(menu);
+                
+        // Add items to menu bar              
+        menu.add(file);
+        menu.add(edit);
+        menu.add(help);
+               
+        // Add items to file menu
+	file.add(upload);											// item
+	file.add(export);
+	file.add(exit);
+
+        // Add items to edit menu
+        edit.add(addD);														// donation item
+	edit.add(deleteD);
+                
+        // Add items to help menu
+	help.add(hDelete);
+        help.add(hExport);
+                
+        // Declare and create handler objects
+        HandlerExport handler   = new HandlerExport();    
+	HandlerExit exitH       = new HandlerExit();          
+        HandlerAdd addH         = new HandlerAdd();          
+        HandlerDelete deleteH   = new HandlerDelete(); 
+        HandlerHdelete hdeleteH = new HandlerHdelete();
+        HandlerHexport hexportH = new HandlerHexport();
+
+        // Add action lisetners
+	upload.addActionListener(this);         //special case for file browser
+        export.addActionListener(handler);
+        exit.addActionListener(exitH);                  
+	addD.addActionListener(addH);
+        deleteD.addActionListener(deleteH);
+        hDelete.addActionListener(hdeleteH);
+        hExport.addActionListener(hexportH);        
+               
+        // Declare and create scroll pane
+        JScrollPane scrollPane = new JScrollPane(table);        
+        add(scrollPane);
         
-        JFrame frame;
-        DefaultTableModel model;
-        JTable table;
-
-	public GUI() {
-		// Set title
-		super("ChequeBox");
-
-		// Set Layout
-		setLayout(new FlowLayout());
-
-		// Initialize Variables
-		menu    = new JMenuBar();
-		file    = new JMenu("File");
-		edit    = new JMenu("Edit");
-		help    = new JMenu("Help");
-		upload  = new JMenuItem("Upload File");
-		export  = new JMenuItem("Export File");
-		exit    = new JMenuItem("Exit");
-                addD   = new JMenuItem("Add Donation");
-                deleteD = new JMenuItem("Delete donation");
-                hDelete = new JMenuItem("How To Delete Donation");
-                hExport = new JMenuItem("How to Export a File");
-                
-                
-                
-
-		// Set Mnemonics
-		file.setMnemonic(KeyEvent.VK_F);
-		edit.setMnemonic(KeyEvent.VK_E);
-		help.setMnemonic(KeyEvent.VK_H);
-
-                //set menu bar
-                setJMenuBar(menu);
-                
-                //add items to menu bar
-                
-                menu.add(file);// add file to frame
-                menu.add(edit);// add edit to frame
-                menu.add(help);// add help to frame
-                
-		file.add(upload);// add upload item											// item
-		file.add(export);// add export item
-		file.add(exit);// add export item
-
-                edit.add(addD);// add add donation item															// donation item
-		edit.add(deleteD);// add delete donation item
-                
-		help.add(hDelete);// add how to delete donation item
-                help.add(hExport);// add how to export file
-                
-                //create handler objects
-                HandlerExport handler   = new HandlerExport();    
-		HandlerExit exitH       = new HandlerExit();          
-                HandlerAdd addH       = new HandlerAdd();          
-                HandlerDelete deleteH   = new HandlerDelete(); 
-                HandlerHdelete hdeleteH = new HandlerHdelete();
-                HandlerHexport hexportH = new HandlerHexport();
-
-                //add action lisetners
-		upload.addActionListener(this);//special case for file browser
-                export.addActionListener(handler);
-                exit.addActionListener(exitH);                  
-		addD.addActionListener(addH);
-                deleteD.addActionListener(deleteH);
-                hDelete.addActionListener(hdeleteH);
-                hExport.addActionListener(hexportH);
-                
-                
-           String[] columnNames = { "First Name", "Last Name", "Department",
+        // ***Causes the main not to work, needed to make size of table = size of frame*** ~ L
+        Dimension d = new Dimension(frame.getContentPane().getWidth(), frame.getContentPane().getHeight());    
+        scrollPane.setPreferredSize(d);
+        
+        // Declare and create table
+        String[] columnNames = { "First Name", "Last Name", "Department",
                                       "Position", "Gender"};             
-            
-            model = new DefaultTableModel(columnNames, 7);
-            
-            table = new JTable( model );
-            JScrollPane tableSP = new JScrollPane(table);
-            
-            add(tableSP);
-            
-	}        
-         
-       // public void tableModel() {
-            
-            //frame = new JFrame("Budget Table");
-            //String[] columnNames = { "First Name", "Last Name", "Department", "Position", "Gender"};             
-            
-           // model = new DefaultTableModel(columnNames, 7);
-            
-           // table = new JTable( model );
-            
-            
-            //frame.setVisible(true);
-            //frame.pack();
-            //frame.setBounds(0,0,500,500);
-            //frame.setLocationRelativeTo(null);
-            //frame.add(table.getTableHeader(), BorderLayout.PAGE_START);
-            //frame.add(table);
-      //  }        
-
-	@Override
-	public void actionPerformed(ActionEvent e) 
-        {
-
-		chooser = new JFileChooser();
-		chooser.setCurrentDirectory(new java.io.File("."));
-		chooser.setDialogTitle("Open");
-		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-                
-		chooser.setAcceptAllFileFilterUsed(false);
-                
-		if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-//			System.out.println("getCurrentDirectory(): "
-//					+ chooser.getCurrentDirectory());
-//			System.out.println("getSelectedFile() : "
-//					+ chooser.getSelectedFile());
-//                        System.out.println("getCurrentDirectory(): "
-//                                        + chooser.getCurrentDirectory());
-//                        System.out.println("getSelectedFile() : "
-//					+ chooser.getSelectedFile());
-                    
-                    
-                    final String FILE_NAME = chooser.getSelectedFile().getName();
-
-                    FileReader fileReader = null;
-                    try {
-                        fileReader = new FileReader(FILE_NAME);
-                    } catch (FileNotFoundException ex) {
-                        
-                    }
-                    BufferedReader bufferedReader = new BufferedReader(fileReader);
-                                        
-                    // List<String> data = new ArrayList<String>();
-                    
-                    String temp = " ";
-                    
-                    //read file into list
-                    try {
-                        int row = 0;
-                        while( (temp = bufferedReader.readLine()) != null)
-                        {
-                            String dataValue[] = temp.split("\t");
-                            String value = "";
-                            
-                            //output data to table
-                            //int numCols = dataValue.length; //universal
-                            int numCols = 5;
-                                for(int col = 0; col < numCols; col++)
-                                {
-                                    value = dataValue[col];
-                                    table.setValueAt(value, row, col);
-                                }
-                            row++;
-                        }
-                        bufferedReader.close();
-                        
-                    } catch (IOException ex) {
-                        
-                    }
-                    
-//                    String[] sArray = data.toArray(new String[data.size()]); 
-//                    System.out.println(sArray[0]);
-
-//                    //print to console
-//                    for (int i=0; i<data.size(); i++)
-//                    {
-//                        System.out.println(data.get(i));                       
-//                    } 
-                } 
-                else {
-			System.out.println("No Selection ");
-		}
-
-	}
+        model = new DefaultTableModel(columnNames, 10);
+        table = new JTable( model );
+        table.setFillsViewportHeight(true);                    
+    } // End of GUI      
        
-        // file menu export handler
-	private class HandlerExport implements ActionListener {
-            public void actionPerformed(ActionEvent event) {
+    @Override
+    // File menu import handler
+    public void actionPerformed(ActionEvent e) {    
+        // Declare and create file chooser
+	chooser = new JFileChooser();
+	chooser.setCurrentDirectory(new java.io.File("."));
+	chooser.setDialogTitle("Open");
+	chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);       
+	chooser.setAcceptAllFileFilterUsed(false);
                 
-                // String sb = "TEST CONTENT";
-                
-                JFileChooser chooser = new JFileChooser();
-                chooser.setCurrentDirectory(new File("/Desktop"));
-                int retrival = chooser.showSaveDialog(null);
-                if (retrival == JFileChooser.APPROVE_OPTION) {
-                    try {
-                        FileWriter filewriter = new FileWriter(chooser.getSelectedFile()+".txt");
-                        
-                        // filewriter.write(sb.toString());
-                       
-                        // convert table back to String
-                        int numRows = 7;
-                        int numCols = 5;
-                        
-                        String s = "";
-                        for (int row = 0; row < numRows; row++) {
-                            for(int col = 0; col < (numCols - 1); col++)
-                            {
-                                s = s + table.getValueAt(row, col) + "\t";
-                            }
-                            s = s + table.getValueAt(row, (numCols - 1));
-                            s = s + "\r\n";
-                        }
-                        
-                        //filewriter.write(s.toString());
-                        filewriter.write(s);
-                        
-                        filewriter.close();
-                    } 
-                    catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }   
+	if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+                    
+            final String FILE_NAME = chooser.getSelectedFile().getName();
+            FileReader fileReader = null;
+            
+            try {
+                fileReader = new FileReader(FILE_NAME);
+            } catch (FileNotFoundException ex) {
             }
-	 }
+        
+            // Declare and create buffered reader
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+                   
+            String temp = " ";
+                    
+            // Read file and put into table
+            try {
+                int row = 0;
+            
+                while( (temp = bufferedReader.readLine()) != null ) {
+                
+                    // Split read in from file by tab
+                    String dataValue[] = temp.split("\t");
+                    String value = "";
+                            
+                    // Output data to table
+                    int numCols = 5;
+                    for(int col = 0; col < numCols; col++) {
+                        value = dataValue[col];
+                        table.setValueAt(value, row, col);
+                    } // End of for
+                            
+                    row++;
+                } // End of while
+            
+                bufferedReader.close();            
+            } catch (IOException ex) {
+            }                
+        }// End of if
+        else {
+            System.out.println("No Selection ");
+        } // End of else
+    }// End of actionPerformed
+       
+    // File menu export handler
+    private class HandlerExport implements ActionListener {
+        public void actionPerformed(ActionEvent event) { 
+            
+            // Declare and create file chooser
+            JFileChooser chooser = new JFileChooser();
+            chooser.setCurrentDirectory(new File("/Desktop"));
+            int retrival = chooser.showSaveDialog(null);
+            
+            // Write table to file
+            if (retrival == JFileChooser.APPROVE_OPTION) {
+                try {
+                    FileWriter filewriter = new FileWriter(chooser.getSelectedFile()+".txt");
+                       
+                    // Convert table back to String
+                    int numRows = 7;
+                    int numCols = 5;
+                        
+                    String s = "";
+                    for (int row = 0; row < numRows; row++) {
+                        for(int col = 0; col < (numCols - 1); col++) {
+                            s = s + table.getValueAt(row, col) + "\t";
+                        } // End of for
+                        
+                        s = s + table.getValueAt(row, (numCols - 1));
+                        s = s + "\r\n";
+                    } // End of for
+                    
+                    // Write string to file and close
+                    filewriter.write(s);
+                    filewriter.close();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            } // End of if 
+        } // End of actionPerformed
+    } // end of HandlerExport
 
-	 // file menu exit handler
-	 private class HandlerExit implements ActionListener {
-	 public void actionPerformed(ActionEvent event) {
-	 int x = JOptionPane.showConfirmDialog(null,
-	 "Would you like to exit?", "Exit Confirmation",
-	 JOptionPane.YES_NO_OPTION);
-	 if (x == JOptionPane.YES_OPTION) {
-             System.exit(0);
-	 }
-	 }
-	 }
+    // File menu exit handler
+    private class HandlerExit implements ActionListener {
+        public void actionPerformed(ActionEvent event) {
+            int x = JOptionPane.showConfirmDialog(null,
+                "Would you like to exit?", "Exit Confirmation", JOptionPane.YES_NO_OPTION);
+            if (x == JOptionPane.YES_OPTION) {
+                System.exit(0);
+            } // End of if
+	} // End of actionPerformed
+    } // End of HandlerExit
 
-	 // edit menu edit donation handler
-	 private class HandlerAdd implements ActionListener {
-	 public void actionPerformed(ActionEvent event) {
-	 int y = JOptionPane.showConfirmDialog(null,
-	 "Would you like to add a donation?", "Add Donation Confirmation",
-         JOptionPane.YES_NO_OPTION);
-         if (y == JOptionPane.YES_OPTION) {
-             model.addRow(new Object[]{""});
-         }
-	 }
-	 }
+    // Edit menu, edit donation handler
+    private class HandlerAdd implements ActionListener {
+	public void actionPerformed(ActionEvent event) {
+            int y = JOptionPane.showConfirmDialog(null,
+                "Would you like to add a donation?", "Add Donation Confirmation", JOptionPane.YES_NO_OPTION);
+            if (y == JOptionPane.YES_OPTION) {
+                model.addRow(new Object[]{""});
+            } // End of if
+	} // End of actionPerformed
+    } // End of HandlerAdd
 
-	 // edit menu delete handler
-	 private class HandlerDelete implements ActionListener {
-	 public void actionPerformed(ActionEvent event) {
-	 int z = JOptionPane.showConfirmDialog(null,
-	 "Would you like to delete the selected donation?", "Delete Donation Confirmation",
-	 JOptionPane.YES_NO_OPTION);
-         if (z == JOptionPane.YES_OPTION) {
-            int row = table.getSelectedRow();
-            model.removeRow(row);
-         }
-	 }
-	 }
+    // Edit menu, delete handler
+    private class HandlerDelete implements ActionListener {
+	public void actionPerformed(ActionEvent event) {
+            int z = JOptionPane.showConfirmDialog(null,
+            "Would you like to delete the selected donation?", "Delete Donation Confirmation", JOptionPane.YES_NO_OPTION);
+            if (z == JOptionPane.YES_OPTION) {
+                int row = table.getSelectedRow();
+                model.removeRow(row);
+            } // End of if
+	} // End of actionPerformed
+    } // End of HandlerDelete
 
-	 // help menu delete handler
-	 private class HandlerHdelete implements ActionListener {
-	 public void actionPerformed(ActionEvent event) {
-	 JOptionPane
-	 .showMessageDialog(
-	 null,
-	 "To delete a donation, select the desired donation "
-	 + "\n to be removed and go to Edit, Delete Donation. "
-	 + "\n A dialog box will appear asking if you are sure you "
-	 + "\n want to delete the donation. Click \"Yes\".",
-	 "How to delete a donation",
-	 JOptionPane.PLAIN_MESSAGE);
-	 }
-	 }
+    // Help menu, delete handler
+    private class HandlerHdelete implements ActionListener {
+	public void actionPerformed(ActionEvent event) {
+            JOptionPane.showMessageDialog(null,
+                "To delete a donation, select the desired donation "
+                + "\n to be removed and go to Edit, Delete Donation. "
+                + "\n A dialog box will appear asking if you are sure you "
+                + "\n want to delete the donation. Click \"Yes\".",
+                "How to delete a donation",JOptionPane.PLAIN_MESSAGE);
+	} // End of actionPerformed
+    } // End of HandlerHdelete
          
-        // help menu export a file
-	 private class HandlerHexport implements ActionListener {
-	 public void actionPerformed(ActionEvent event) {
-	 JOptionPane
-	 .showMessageDialog(
-	 null,
-	 "To export a file, go to File, Export File. A window  "
-	 + "\n will pop up asking you to select a location to "
-	 + "\n save the file and to name the file. Then, click"
-	 + "\n \"Save\".",
-	 "How to export a file",
-	 JOptionPane.PLAIN_MESSAGE);
-	 }
-	 }
-}
+    // Help menu, export handler
+    private class HandlerHexport implements ActionListener {
+	public void actionPerformed(ActionEvent event) {
+            JOptionPane.showMessageDialog(null,
+                "To export a file, go to File, Export File. A window  "
+                + "\n will pop up asking you to select a location to "
+                + "\n save the file and to name the file. Then, click"
+                + "\n \"Save\".", "How to export a file", JOptionPane.PLAIN_MESSAGE);
+	} // End of actionPerformed
+    } // End of HandlerHexport
+} // End of GUI class
