@@ -75,7 +75,7 @@ public class GUI extends JFrame implements ActionListener {
     JFrame frame;
     JTable table;
     DefaultTableModel model;
-
+    
     public GUI() {	
         // Set title of GUI
         super("ChequeBox");
@@ -137,22 +137,26 @@ public class GUI extends JFrame implements ActionListener {
 	addD.addActionListener(addH);
         deleteD.addActionListener(deleteH);
         hDelete.addActionListener(hdeleteH);
-        hExport.addActionListener(hexportH);        
-               
-        // Declare and create scroll pane
-        JScrollPane scrollPane = new JScrollPane(table);        
-        add(scrollPane);
-        
-        // ***Causes the main not to work, needed to make size of table = size of frame*** ~ L
-        Dimension d = new Dimension(frame.getContentPane().getWidth(), frame.getContentPane().getHeight());    
-        scrollPane.setPreferredSize(d);
+        hExport.addActionListener(hexportH);                       
         
         // Declare and create table
         String[] columnNames = { "First Name", "Last Name", "Department",
                                       "Position", "Gender"};             
-        model = new DefaultTableModel(columnNames, 10);
+        
+        model = new DefaultTableModel(columnNames, 5);
+            
         table = new JTable( model );
-        table.setFillsViewportHeight(true);                    
+        JScrollPane tableSP = new JScrollPane(table);
+             
+        add(tableSP);             
+             
+        int a = this.getWidth();
+        int b = this.getHeight();
+             
+        tableSP.setSize(400,700);
+        System.out.println(a);
+        System.out.println(b);
+        
     } // End of GUI      
        
     @Override
@@ -224,7 +228,7 @@ public class GUI extends JFrame implements ActionListener {
                     FileWriter filewriter = new FileWriter(chooser.getSelectedFile()+".txt");
                        
                     // Convert table back to String
-                    int numRows = 7;
+                    int numRows = 5;
                     int numCols = 5;
                         
                     String s = "";
