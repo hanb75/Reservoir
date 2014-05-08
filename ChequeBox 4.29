@@ -262,7 +262,7 @@ public class GUI extends JFrame implements ActionListener {
 	} // End of actionPerformed
     } // End of HandlerExit
 
-    // Edit menu, edit donation handler
+    // Edit menu, add donation handler
     private class HandlerAdd implements ActionListener {
 	public void actionPerformed(ActionEvent event) {
             int y = JOptionPane.showConfirmDialog(null,
